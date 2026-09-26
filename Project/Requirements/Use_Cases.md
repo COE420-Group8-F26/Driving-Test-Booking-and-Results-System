@@ -14,7 +14,9 @@
 - **UC-07 — Submit Test Result:** An examiner records a pass or fail outcome, along with optional notes, for a completed test and marks the booking as finished.
 - **UC-08 — Receive Notification:** The system sends an automated alert to a user when a relevant event occurs, such as a booking change, examiner assignment, or result becoming available.
 - **UC-09 — View Booking Details:** An administrator views the details of a specific booking, including applicant, examiner, slot time, and status, from the admin dashboard.
-- **UC-10 — Prevent Duplicate Booking:** When two applicants attempt to book the same slot simultaneously, the system rejects the second request and prompts that applicant to choose another slot.
+- **UC-10 — Download Test Result Certificate** An applicant who has passed their driving test downloads a certificate or confirmation document from their account for their records. 
+
+
 
 ## Aira Contributions
 
