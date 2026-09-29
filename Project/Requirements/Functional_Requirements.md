@@ -31,3 +31,38 @@
 - **FR-18:** The system shall allow an applicant to view the date, time, location, and status of their upcoming booking from "My Bookings."
 - **FR-19:** The system shall record the date and time at which an examiner submits a test result and store it with the applicant's test record.
 - **FR-20:** The system shall prevent an examiner from submitting a pass/fail result before the scheduled test time has occurred.
+- **FR-21:** The system shall allow administrators to view the details of a selected booking, including the applicant, assigned examiner, test date and time, location, and booking status.
+- **FR-22:** The system shall allow a registered user who has forgotten their password to request a password reset through their verified email address and set a new password.
+- **FR-23:** The system shall allow logged-in applicants to update their editable profile information, including their address and phone number.
+- **FR-24:** The system shall allow examiners to specify the dates and times during which they are available to conduct driving tests.
+- **FR-25:** The system shall allow authenticated users to log out and shall invalidate the active session after logout.
+- **FR-26:** The system shall allow an applicant who has passed their driving test to download a result certificate or confirmation document from their account.
+
+## Team Consolidated Requirements
+
+- **FR-01:** The system shall allow applicants to register using their full name, a verified email address, and a valid password.
+- **FR-02:** The system will display real-time available test slots when applicants search for a booking location and date.
+- **FR-03:** The system shall prevent two bookings from being made for the same test slot by implementing a transaction block during booking processes.
+- **FR-04:** The system shall allow driving examiners to submit a pass or fail grade, alongside optional notes, for any assigned tests to them and mark them as completed.
+- **FR-05:** The system shall send automated notifications to applicants when a booking is made, cancelled, or rescheduled, and when test results become available.
+- **FR-06:** The system will authenticate users with their email and passwords and redirect each user to their dashboard for their role (applicant, examiner, or administrator).
+- **FR-07:** The system will create a booking with the status "Confirmed" when an applicant chooses their slot from the available slots. If the applicant already has a booking at the same date and time, the request is rejected.
+- **FR-08:** When the chosen slot is booked by another applicant before an applicant's current booking was completed, the system shall display an error message and prompt the applicant to select another time.
+- **FR-09:** The system shall allow applicants to reschedule an upcoming booking from "My Bookings" by selecting a new available slot. It shall release the original slot back to the available pool only once the new booking is confirmed.
+- **FR-10:** The system shall allow administrators to view examiners available for a selected test date and time and assign an available examiner to a confirmed booking that has no examiner. The system shall reject the assignment if that examiner already has a test at the same date and time and shall notify the assigned examiner.
+- **FR-11:** The system shall allow applicants to view their complete test history, including past bookings, dates, locations, and pass/fail results.
+- **FR-12:** The system shall allow administrators to view a list of all upcoming bookings filtered by date, location, or examiner assignment status.
+- **FR-13:** The system shall allow applicants to cancel an upcoming booking, releasing the slot back into the available pool and sending a cancellation confirmation.
+- **FR-14:** The system shall allow examiners to view a list of their assigned tests for the day, including applicant name, time, and location.
+- **FR-15:** The system shall update an applicant's overall record status (e.g., "Licensed" or "Retest Required") automatically once an examiner submits a pass or fail result.
+- **FR-16:** The system shall prevent an applicant from booking a driving test less than 30 minutes before the scheduled start time and shall inform the applicant that the booking cutoff has passed.
+- **FR-17:** The system shall generate a unique booking reference number for every successfully confirmed driving test booking.
+- **FR-18:** The system shall allow an applicant to view the date, time, location, and status of their upcoming booking from "My Bookings."
+- **FR-19:** The system shall record the date and time at which an examiner submits a test result and store it with the applicant's test record.
+- **FR-20:** The system shall prevent an examiner from submitting a pass/fail result before the scheduled test time has occurred.
+- **FR-21:** The system shall allow administrators to view the details of a selected booking, including the applicant, assigned examiner, test date and time, location, and booking status.
+- **FR-22:** The system shall allow a registered user who has forgotten their password to request a password reset through their verified email address and set a new password.
+- **FR-23:** The system shall allow logged-in applicants to update their editable profile information, including their address and phone number.
+- **FR-24:** The system shall allow examiners to specify the dates and times during which they are available to conduct driving tests.
+- **FR-25:** The system shall allow authenticated users to log out and shall invalidate the active session after logout.
+- **FR-26:** The system shall allow an applicant who has passed their driving test to download a result certificate or confirmation document from their account.
