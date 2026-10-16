@@ -33,7 +33,7 @@
 - **FR-20:** The system shall prevent an examiner from submitting a pass/fail result before the scheduled test time has occurred.
 - **FR-21:** The system shall allow administrators to view the details of a selected booking, including the applicant, assigned examiner, test date and time, location, and booking status.
 - **FR-22:** The system shall allow a registered user who has forgotten their password to request a password reset through their verified email address and set a new password.
-- **FR-23:** The system shall allow logged-in applicants to update their editable profile information, including their address and phone number.
+- **FR-23:** The system shall allow authenticated  applicants to update their editable profile information, including their address and phone number.
 - **FR-24:** The system shall allow examiners to specify the dates and times during which they are available to conduct driving tests.
 - **FR-25:** The system shall allow authenticated users to log out and shall invalidate the active session after logout.
 - **FR-26:** The system shall allow an applicant who has passed their driving test to download a result certificate or confirmation document from their account.
@@ -62,7 +62,7 @@
 - **FR-20:** The system shall prevent an examiner from submitting a pass/fail result before the scheduled test time has occurred.
 - **FR-21:** The system shall allow administrators to view the details of a selected booking, including the applicant, assigned examiner, test date and time, location, and booking status.
 - **FR-22:** The system shall allow a registered user who has forgotten their password to request a password reset through their verified email address and set a new password.
-- **FR-23:** The system shall allow logged-in applicants to update their editable profile information, including their address and phone number.
+- **FR-23:** The system shall allow authenticated  applicants to update their editable profile information, including their address and phone number.
 - **FR-24:** The system shall allow examiners to specify the dates and times during which they are available to conduct driving tests.
 - **FR-25:** The system shall allow authenticated users to log out and shall invalidate the active session after logout.
 - **FR-26:** The system shall allow an applicant who has passed their driving test to download a result certificate or confirmation document from their account.
