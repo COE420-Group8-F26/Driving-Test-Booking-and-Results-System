@@ -11,3 +11,9 @@
 | **S-07** | Updating Profile Information | Applicant | A logged-in applicant opens their profile and changes editable personal information, such as their address or phone number. The system saves the updated information to the applicant's profile. |
 | **S-08** | Setting Examiner Availability | Examiner | An examiner logs into the system and enters the days and times during which they are available to conduct driving tests. The system stores this availability so that administrators can consider it when assigning examiners to bookings. |
 | **S-09** | Logging Out | Applicant, Examiner, Administrator | A logged-in user selects "Log Out." The system ends the active session and prevents access to protected functions until the user logs in again. |
+| **S-10** | Notification Delivery Failure | Applicant, Examiner | A booking is confirmed but the email service is unavailable. The system retries 3 times, then logs the failure and alerts the administrator. The booking stays Confirmed and the applicant sees it in My Booking |
+
+
+
+
+
