@@ -23,6 +23,7 @@
 - **FR-13:** The system shall allow applicants to cancel an upcoming booking, releasing the slot back into the available pool and sending a cancellation confirmation.
 - **FR-14:** The system shall allow examiners to view a list of their assigned tests for the day, including applicant name, time, and location.
 - **FR-15:** The system shall update an applicant's overall record status (e.g., "Licensed" or "Retest Required") automatically once an examiner submits a pass or fail result.
+- **FR-27:** The system shall retry a failed notification up to 3 times at 5-minute intervals, log any notification that still fails, and keep the triggering booking, cancellation, assignment or result valid. 
 
 ## Farah Contributions
 
@@ -66,3 +67,4 @@
 - **FR-24:** The system shall allow examiners to specify the dates and times during which they are available to conduct driving tests.
 - **FR-25:** The system shall allow authenticated users to log out and shall invalidate the active session after logout.
 - **FR-26:** The system shall allow an applicant who has passed their driving test to download a result certificate or confirmation document from their account.
+- **FR-27:** The system shall retry a failed notification up to 3 times at 5-minute intervals, log any notification that still fails, and keep the triggering booking, cancellation, assignment or result valid. 
