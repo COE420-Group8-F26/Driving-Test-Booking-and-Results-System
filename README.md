@@ -36,7 +36,7 @@ Contact details and individual skill sets are listed under [`Team/`](Team).
 
 ```
 .
-├── Documents/                          # Supplementary project documents and lab reports
+├── Documents/                          
 ├── Project/
 │   ├── Project_Title.md
 │   ├── Project_Description.md
