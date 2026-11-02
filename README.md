@@ -111,3 +111,6 @@ This section will be updated once the stack is locked in.
 
 In progress. The requirements, design, and planning stages are complete: scope, feasibility study, risk register, stakeholder analysis, use cases, scenarios, functional and non-functional requirements, data flow models (context diagram, Level-0 DFD, and core processes matrix), and project scheduling (WBS, Gantt chart, network schedule, and critical path). Source code development has not yet started.
 
+## Lab 6 – UML Sequence Diagram Modeling
+Selected use cases: [Selected_Use_Cases.md](Project/Behavioral_Modeling/Selected_Use_Cases.md)
+Sequence diagrams: [Sequence_Diagrams](Project/Behavioral_Modeling/Sequence_Diagrams)
