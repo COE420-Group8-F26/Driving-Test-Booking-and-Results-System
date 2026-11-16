@@ -1,0 +1,348 @@
+
+@startuml
+title Driving Test Booking and Results System\nSoftware Architecture Component Diagram - Group 8
+
+top to bottom direction
+
+skinparam backgroundColor white
+skinparam shadowing false
+skinparam componentStyle uml2
+skinparam packageStyle rectangle
+skinparam linetype ortho
+skinparam defaultFontName Arial
+skinparam defaultFontSize 12
+skinparam nodesep 20
+skinparam ranksep 35
+skinparam ArrowColor #64748B
+skinparam componentBackgroundColor white
+skinparam componentBorderColor #334155
+skinparam interfaceBorderColor #2563EB
+skinparam packageBorderColor #64748B
+skinparam noteBackgroundColor #FFFDF3
+skinparam noteBorderColor #CBD5E1
+skinparam wrapWidth 230
+
+package "Layer 1 - Presentation" #EAF3FF {
+  component "CO1\nWeb User Interface" as UI
+}
+
+package "Layer 2 - Application" #EAF8F0 {
+  component "CO2\nAccount and Access Control" as ACC
+  component "CO3\nBooking and Scheduling" as BSC
+  component "CO4\nResults and Certification" as RSC
+  component "CO5\nNotification and Audit" as NAC
+
+  ACC -[hidden]right- BSC
+  ACC -[hidden]down- RSC
+  BSC -[hidden]down- NAC
+  RSC -[hidden]right- NAC
+}
+
+package "Layer 3 - Data" #FFF3E8 {
+  component "CO6\nData Management" as DATA
+}
+
+() "IAccountService" as IA
+() "IAccessControlService" as IX
+() "IBookingService" as IB
+() "ISchedulingService" as IS
+() "IResultService" as IR
+() "INotificationService" as IN
+() "IAuditService" as IT
+() "IAccountData" as IAD
+() "IBookingData" as IBD
+() "IScheduleData" as ISD
+() "IResultData" as IRD
+() "INotificationData" as IND
+
+ACC - IA
+ACC - IX
+BSC - IB
+BSC - IS
+RSC - IR
+NAC - IN
+NAC - IT
+
+DATA - IAD
+DATA - IBD
+DATA - ISD
+DATA - IRD
+DATA - IND
+
+UI -u-( IA
+UI -u-( IX
+UI -u-( IB
+UI -u-( IS
+UI -u-( IR
+UI -u-( IN
+
+BSC -l-( IX
+RSC -l-( IX
+
+BSC -d-( IN
+BSC -d-( IT
+RSC -d-( IN
+RSC -d-( IT
+
+ACC -d-( IAD
+
+BSC -d-( IBD
+BSC -d-( ISD
+
+RSC -d-( IBD
+RSC -d-( ISD
+RSC -d-( IRD
+
+NAC -d-( IND
+
+cloud "Email Service" as EMAIL
+database "Relational Database" as DB
+
+ACC ..> EMAIL : reset links
+NAC ..> EMAIL : notifications
+DATA --> DB : read/write
+
+note top of UI
+<b>Assigned Classes</b>
+None
+end note
+
+note left of ACC
+<b>Assigned Classes</b>
+User, Applicant
+Examiner, Administrator
+Role, RecordStatus
+Session, PasswordResetToken
+end note
+
+note right of BSC
+<b>Assigned Classes</b>
+BookingManager
+ScheduleManager
+end note
+
+note left of RSC
+<b>Assigned Classes</b>
+ResultManager
+end note
+
+note right of NAC
+<b>Assigned Classes</b>
+NotificationService
+Notification, NotificationType
+AuditLog, ActionType
+end note
+
+note bottom of DATA
+<b>Assigned Classes</b>
+Booking, BookingStatus
+TestSlot, Availability
+ExaminerAssignment
+AssignmentStatus
+TestResult, Outcome
+Certificate
+end note
+
+note left of IA
+<b>IAccountService</b>
+register(): boolean
+login(email: String,
+ password: String): Session
+logout(session: Session): void
+changePassword(
+ oldPwd: String,
+ newPwd: String): boolean
+resetPassword(
+ token: String,
+ newPwd: String): boolean
+end note
+
+note left of IX
+<b>IAccessControlService</b>
+isValid(session: Session): boolean
+getUser(session: Session): User
+updateRecordStatus(
+ applicant: Applicant,
+ outcome: Outcome): void
+end note
+
+note right of IB
+<b>IBookingService</b>
+searchAvailableSlots(
+ location: String,
+ date: Date): List<TestSlot>
+validateBookingCutoff(
+ slot: TestSlot): boolean
+checkBookingConflict(
+ applicantId: int,
+ slot: TestSlot): boolean
+createBooking(
+ applicant: Applicant,
+ slot: TestSlot,
+ testType: String): Booking
+cancelBooking(
+ booking: Booking): boolean
+rescheduleBooking(
+ booking: Booking,
+ newSlot: TestSlot): boolean
+getBookingHistory(
+ applicant: Applicant): List<Booking>
+end note
+
+note right of IS
+<b>ISchedulingService</b>
+recordAvailability(
+ examiner: Examiner,
+ date: Date,
+ start: Time,
+ end: Time): Availability
+removeAvailability(
+ availabilityId: int): boolean
+getAvailableExaminers(
+ slot: TestSlot): List<Examiner>
+assignExaminer(
+ admin: Administrator,
+ booking: Booking,
+ examiner: Examiner):
+ ExaminerAssignment
+reassignExaminer(
+ admin: Administrator,
+ booking: Booking,
+ newExaminer: Examiner):
+ ExaminerAssignment
+getScheduleFor(
+ examiner: Examiner): List<Booking>
+end note
+
+note left of IR
+<b>IResultService</b>
+canSubmitResult(
+ examiner: Examiner,
+ booking: Booking): boolean
+submitResult(
+ examiner: Examiner,
+ booking: Booking,
+ outcome: Outcome,
+ score: int,
+ remarks: String): TestResult
+getResult(
+ applicant: Applicant,
+ booking: Booking): TestResult
+getTestHistory(
+ applicant: Applicant):
+ List<TestResult>
+issueCertificate(
+ applicant: Applicant,
+ result: TestResult): Certificate
+end note
+
+note right of IN
+<b>INotificationService</b>
+notifyExaminerAssigned(
+ assignment: ExaminerAssignment):
+ Notification
+notifyAssignmentRevoked(
+ assignment: ExaminerAssignment):
+ Notification
+notifyResultAvailable(
+ result: TestResult): Notification
+notifyBookingConfirmed(
+ booking: Booking): Notification
+notifyBookingCancelled(
+ booking: Booking): Notification
+notifyBookingRescheduled(
+ booking: Booking): Notification
+getNotificationsFor(
+ user: User): List<Notification>
+end note
+
+note right of IT
+<b>IAuditService</b>
+recordEntry(
+ actor: User,
+ actionType: ActionType,
+ recordType: String,
+ recordId: int): AuditLog
+end note
+
+note left of IAD
+<b>IAccountData</b>
+getUserByEmail(
+ email: String): User
+saveUser(user: User): boolean
+saveSession(
+ session: Session): boolean
+savePasswordResetToken(
+ token: PasswordResetToken):
+ boolean
+end note
+
+note left of IBD
+<b>IBookingData</b>
+createBookingRecord(
+ applicant: Applicant,
+ slot: TestSlot,
+ testType: String): Booking
+confirm(booking: Booking): void
+cancel(booking: Booking): void
+reschedule(
+ booking: Booking,
+ slot: TestSlot): void
+markCompleted(
+ booking: Booking): void
+reserve(slot: TestSlot): boolean
+release(slot: TestSlot): void
+isAvailable(slot: TestSlot): boolean
+end note
+
+note right of ISD
+<b>IScheduleData</b>
+saveAvailability(
+ availability: Availability): boolean
+getAvailability(
+ examiner: Examiner,
+ date: Date): List<Availability>
+createAssignment(
+ booking: Booking,
+ examiner: Examiner,
+ admin: Administrator):
+ ExaminerAssignment
+getActiveAssignment(
+ booking: Booking):
+ ExaminerAssignment
+revoke(
+ assignment: ExaminerAssignment): void
+end note
+
+note right of IRD
+<b>IResultData</b>
+createResult(
+ booking: Booking,
+ examiner: Examiner,
+ outcome: Outcome,
+ score: int,
+ remarks: String): TestResult
+getResult(
+ booking: Booking): TestResult
+isPass(
+ result: TestResult): boolean
+saveCertificate(
+ certificate: Certificate): boolean
+end note
+
+note right of IND
+<b>INotificationData</b>
+saveNotification(
+ notification: Notification): boolean
+getNotificationsFor(
+ user: User): List<Notification>
+saveAuditEntry(
+ entry: AuditLog): boolean
+end note
+
+note bottom of IAD
+saveUser persists the failed-login
+counter and account lock status.
+end note
+
+@enduml
