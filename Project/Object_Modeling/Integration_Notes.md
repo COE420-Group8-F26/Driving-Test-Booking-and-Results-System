@@ -1,52 +1,56 @@
 # Integration Notes
 
-**Project:** Driving Test Booking and Results System (COE 420 Sec 02, Group 8)
-
-This document records the significant changes made when the individual class models were consolidated into one team UML Class Diagram (`Class_Diagram/`).
-
 ## 1. Merged Duplicate Classes
+
+Several classes appeared in more than one individual model. Each was merged into a single definition, as summarised below.
 
 | Class | Source of Duplication | Resolution |
 |---|---|---|
-| User | Full version in the Users and Security model; reduced versions (userId and name only) in Examiner Scheduling, Admin Oversight, Results and Notifications. | Full version retained because it contains authentication, lockout and password reset attributes. Reduced versions deleted. |
-| Examiner | Individual models of Zainab, Areej and Aira. | Merged into one class with all attributes (examinerNumber, licenseCategories) and methods (availability, schedule, submitResult). |
-| Administrator | Users and Security model and Admin Oversight model. | Merged. reassignExaminer was taken from the Admin Oversight model. |
+| User | Full version in the Users and Security model; reduced versions (userId and name only) in the Examiner Scheduling, Admin Oversight, Results and Notifications models. | The full version was retained because it contains the authentication, lockout and password reset attributes. The reduced versions were deleted. |
+| Examiner | Individual models of Zainab, Areej and Aira. | Merged into one class containing all attributes (examinerNumber, licenseCategories) and the methods submitAvailability, viewMySchedule and submitResult. |
+| Administrator | Users and Security model and Admin Oversight model. | Merged. The method reassignExaminer was taken from the Admin Oversight model. filterBookings was moved to BookingManager (Section 3). |
 | Applicant | Users and Security model and Results model. | Merged. viewMyResult and requestCertificate are listed once. |
-| Booking | Examiner Scheduling, Admin Oversight, Results and Booking models. | Booking model version used as the base because it is the most complete. |
-| TestSlot | Examiner Scheduling (name only) and Booking model. | Booking model version used. |
+| Booking | Examiner Scheduling, Admin Oversight, Results and Booking models. | The Booking model version was used as the base because it is the most complete. Its names were standardised (Section 3). |
+| TestSlot | Examiner Scheduling model (reduced) and Booking model. | The Booking model version was used, with endTime taken from the Examiner Scheduling version. |
 | ExaminerAssignment | Examiner Scheduling and Admin Oversight models. | Merged into a single definition. |
-| ScheduleManager | Examiner Scheduling and Admin Oversight models. | Merged. assignExaminer and reassignExaminer added to the Examiner Scheduling method list. |
+| ScheduleManager | Examiner Scheduling and Admin Oversight models. | Merged. assignExaminer and reassignExaminer were added to the Examiner Scheduling method list. |
+| AuditLog | Full version in the Users and Security model; name-only copy in the Admin Oversight model. | The full version was retained. |
 | NotificationType, BookingStatus, Outcome | Drawn in more than one individual diagram. | Each enumeration is now defined once. |
 
 ## 2. Removed Elements
 
-- **Foreign key attributes.** Several classes held both an identifier attribute and an association to the same class, representing the same relationship twice. The identifier attributes were removed and the named association carries the link: Availability.examinerId, ExaminerAssignment.bookingId, ExaminerAssignment.examinerId, ExaminerAssignment.assignedByAdminId, TestResult.bookingId, TestResult.examinerId, Certificate.resultId, Notification.recipientId, Session.userId, PasswordResetToken.userId, AuditLog.performedBy and Booking.testSlot. Foreign keys remain necessary in the database schema, but they are an implementation detail and not part of the class model.
-- **Reduced class copies.** The reduced copies of User, Examiner, Booking and TestSlot (Section 1) were deleted.
-- **Methods omitted from the final diagram.** To keep the consolidated diagram readable, only the important methods are shown. Omitted: validateRegistration, the private login helpers (incrementFailedLogins, lockAccount, resetFailedLogins), viewMyBookings, viewMyAvailability, removeAvailability, getUnassignedBookings, hasConflict, and the notifyAssignmentRevoked, notifyBookingCancelled and notifyBookingRescheduled methods of NotificationService. Session.getUser, AuditLog.getByUser and getByRecord, and Availability helper methods in the individual diagrams are also omitted. The complete method lists are retained in the individual component diagrams.
+- **Foreign key attributes.** Several classes contained both an identifier attribute and an association to the same class, which represented the same relationship twice. The identifier attributes were removed and the named association now carries the link: Availability.examinerId, ExaminerAssignment.bookingId, ExaminerAssignment.examinerId, ExaminerAssignment.assignedByAdminId, TestResult.bookingId, TestResult.examinerId, Certificate.resultId, Notification.recipientId, Session.userId, PasswordResetToken.userId, AuditLog.performedBy and Booking.testSlot. Foreign keys remain necessary in the database schema, but they are an implementation detail and are not part of the class model.
+- **Reduced class copies.** The reduced copies of User, Examiner, Applicant, Booking and TestSlot, the name-only AuditLog in the Admin Oversight model, and the name-only ResultManager and ScheduleManager in the Notifications model were deleted.
+- **Methods replaced by manager operations.** Administrator.viewExaminerAvailability was replaced by ScheduleManager.getAvailableExaminers (UC-20). Examiner.removeAvailability was replaced by ScheduleManager.removeAvailability, which already existed in the Examiner Scheduling model. Applicant.viewAvailableSlots was replaced by BookingManager.searchAvailableSlots. ResultManager.downloadCertificate was replaced by Certificate.getDocument.
+- **Methods omitted from the final diagram.** To keep the final diagram readable on a single page, helper and query methods that no sequence diagram uses were omitted: User.validateRegistration, PasswordResetToken.isExpired (covered by isValid), AuditLog.getByUser and getByRecord, Applicant.viewMyBookings, Examiner.viewMyAvailability, Availability.isValid, ScheduleManager.getAvailability, hasConflict and getUnassignedBookings, TestResult.getSummary and Certificate.isValid. They remain in the individual diagrams.
 
 ## 3. Modified Elements
 
-- **Applicant.updateRecordStatus.** Private in the Users and Security model, but it must be invoked after a result is recorded, so it was made public.
-- **User login helpers.** incrementFailedLogins, lockAccount and resetFailedLogins were public but are only used inside login(), so they were made private.
-- **RecordStatus value.** RETEST REQUIRED renamed RETEST_REQUIRED because an enumeration literal cannot contain a space.
-- **Notification description.** The inventory said Notification covers only examiner assignment and revocation. It was extended to all six notification types.
-- **Responsibilities of user classes.** Methods of Applicant, Examiner and Administrator overlapped with BookingManager, ScheduleManager and ResultManager. The user class methods were kept as entry points, and notes state that the business rules live in the manager classes.
-- **Association direction.** The ExaminerAssignment and Booking association, named "is covered by", read backwards in one diagram. The name was kept and oriented from Booking to ExaminerAssignment.
-- **Booking naming (Farah's model).** Attributes renamed for consistency: bookingID to bookingId, referenceNumber to bookingRef, bookingDate to createdAt, and status changed from String to the BookingStatus enumeration. cancellationDate was kept.
-- **Booking methods.** confirmBooking, cancelBooking and getBookingDetails were shortened to confirm, cancel and getDetails. updateSlot became reschedule(newSlot). isActive and markCompleted were kept.
-- **TestSlot naming (Farah's model).** testDate renamed date, and endTime added. isBooked, isAvailable(), reserveSlot() and releaseSlot() were kept, with the last two renamed reserve() and release().
-- **BookingManager.** validateBookingCutoff renamed validateCutoff. checkBookingConflict, generateReferenceNumber, getUpcomingBooking and getBookingHistory were restored after an earlier draft of the consolidated diagram omitted them. The dependency "serves" from BookingManager to Applicant was restored.
+- **Applicant.updateRecordStatus.** This method had package visibility (~) in the Users and Security model, but ResultManager must invoke it after a result is recorded. Its visibility was changed to public.
+- **User login helpers.** incrementFailedLogins, lockAccount and resetFailedLogins remain private, because only login() uses them. They are shown in the final diagram because the UC-01 sequence diagram calls them.
+- **RecordStatus value.** RETEST REQUIRED was renamed RETEST_REQUIRED, because an enumeration literal cannot contain a space.
+- **BookingManager names.** These were aligned with the other models: validateBookingCutoff was renamed validateCutoff; checkBookingConflict(applicantID: int, slot) became checkBookingConflict(applicant: Applicant, slot); and rescheduleBooking now returns Booking instead of boolean, to match Applicant.rescheduleBooking.
+- **Booking names.** bookingID was renamed bookingId, referenceNumber bookingRef, and bookingDate createdAt. status changed from String to BookingStatus. The methods confirmBooking, cancelBooking, updateSlot and getBookingDetails were renamed confirm, cancel, reschedule and getDetails.
+- **TestSlot names.** slotID was renamed slotId and testDate date. reserveSlot and releaseSlot were renamed reserve and release.
+- **filterBookings.** Moved from Administrator to BookingManager, so that all booking queries sit in one controller. Its parameters changed from (date, status, applicant, examiner) to (date, location, assignmentStatus), to match FR21 (filter by date, location or examiner-assignment status).
+- **Notification description.** The class inventory stated that Notification covers only examiner assignment and revocation notices. The description was extended to all six notification types, since NotificationType and NotificationService already support booking and result notices.
+- **Responsibilities of user classes.** The methods of Applicant, Examiner and Administrator overlapped with those of BookingManager, ScheduleManager and ResultManager. The user class methods were retained as entry points; the business rules are implemented in the manager classes.
+- **Association direction.** The association between ExaminerAssignment and Booking was named "is covered by" but read backwards in one diagram. The name was retained and oriented from Booking to ExaminerAssignment.
+- **Association name.** The Notification-to-User association "sent to" was renamed "receives" and oriented from User to Notification, to match the other User associations ("has", "requests", "performs").
 
 ## 4. Added Elements
 
-- **BookingStatus enumeration** (CONFIRMED, CANCELLED, RESCHEDULED, COMPLETED), used by Booking but previously drawn in only one individual diagram.
-- **ActionType values** BOOKING_RESCHEDULED, AVAILABILITY_REMOVED and EXAMINER_REASSIGNED, because the manager classes log these actions and NFR17 requires an audit record for every such action.
-- **Booking.testType**, because requestBooking and createBooking both accept a test type.
-- **Reserve and release behavior on TestSlot**, to reflect that a slot can be reserved once and released after cancellation or rescheduling.
-- **UML notes** for the main constraints: account lockout, one active booking per slot, one ACTIVE assignment per booking, certificates only for PASS results, and the append-only audit log.
+- **BookingStatus enumeration** (CONFIRMED, CANCELLED, RESCHEDULED, COMPLETED). Booking used it, but it was only drawn in one individual diagram.
+- **ActionType values.** BOOKING_RESCHEDULED, AVAILABILITY_REMOVED and EXAMINER_REASSIGNED were added, because the manager classes log these actions and NFR17 requires an audit record for every such action. NOTIFICATION_FAILED was added because a notification that still fails after 3 retries is written to the audit log (FR27).
+- **Booking.testType.** Added because requestBooking and createBooking both accept a test type, so Booking needs an attribute to store it.
+- **BookingManager.getBookingDetails(booking).** Added so that administrators can view a booking's applicant, examiner, date, time, location and status (UC-05).
+- **ScheduleManager.getAvailableExaminers(slot).** Added to support View Examiner Availability (UC-20) when assigning an examiner.
+- **NotificationService.alertNotificationFailure(notification).** Added for FR27: a notification that still fails after 3 retries is logged and the administrator is alerted.
+- **Manager dependencies.** Dependencies were added from BookingManager, ScheduleManager and ResultManager to AuditLog; from ResultManager to Booking and Applicant; and from ScheduleManager to Booking and Examiner. These cover every interaction shown in the sequence diagrams.
+- **UML notes.** Notes were added for the main constraints: account lockout, one active booking per slot, one ACTIVE assignment per booking, certificates only for PASS results, the append-only audit log, and the notification retry rule.
 
 ## 5. Design Decisions
 
-- **Booking to TestSlot (0..* to 1).** A slot can be reused after a booking is cancelled, so many bookings may reference one slot over time, but only one non-cancelled booking may hold it at any moment (stated in a note).
+- **Booking to TestSlot (0..* to 1).** A slot can be reused after a booking is cancelled, so many bookings may reference one slot over time, but only one non-cancelled booking may hold it at any moment. This is stated in a note.
 - **Booking to ExaminerAssignment (1 to 0..*).** Revoked assignments are kept as history, so a booking may have several assignments, of which at most one is ACTIVE.
-- **Inheritance.** Used only for User, with Applicant, Examiner and Administrator as subclasses, because this is the only genuine generalization in the system.
+- **Inheritance.** Inheritance is used only for User, with Applicant, Examiner and Administrator as subclasses, because this is the only genuine generalization in the system.
