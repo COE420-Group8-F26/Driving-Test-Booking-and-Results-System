@@ -1,0 +1,198 @@
+
+@startuml
+title Driving Test Booking and Results System\nSoftware Architecture Component Diagram - Group 8
+
+top to bottom direction
+
+skinparam backgroundColor white
+skinparam shadowing false
+skinparam componentStyle uml2
+skinparam packageStyle rectangle
+skinparam linetype ortho
+skinparam defaultFontName Arial
+skinparam defaultFontSize 13
+skinparam nodesep 55
+skinparam ranksep 65
+skinparam ArrowColor #64748B
+skinparam componentBackgroundColor white
+skinparam componentBorderColor #334155
+skinparam interfaceBorderColor #2563EB
+skinparam interfaceFontSize 11
+skinparam packageBorderColor #64748B
+skinparam rectangleBorderColor #CBD5E1
+skinparam rectangleBackgroundColor #F8FAFC
+skinparam wrapWidth 240
+skinparam shadowing false
+
+package "Layer 1 - Presentation" #EAF3FF {
+  component "CO1\nWeb User Interface" as UI
+}
+
+package "Layer 2 - Application" #EAF8F0 {
+  component "CO2\nAccount and Access Control" as ACC
+  component "CO3\nBooking and Scheduling" as BSC
+  component "CO4\nResults and Certification" as RSC
+  component "CO5\nNotification and Audit" as NAC
+
+  ACC -[hidden]right- BSC
+  ACC -[hidden]down- RSC
+  BSC -[hidden]down- NAC
+  RSC -[hidden]right- NAC
+}
+
+package "Layer 3 - Data" #FFF3E8 {
+  component "CO6\nData Management" as DATA
+}
+
+() "01" as IA
+() "02" as IX
+() "03" as IB
+() "04" as IS
+() "05" as IR
+() "06" as IN
+() "07" as IT
+() "08" as IAD
+() "09" as IBD
+() "10" as ISD
+() "11" as IRD
+() "12" as IND
+
+ACC - IA
+ACC - IX
+BSC - IB
+BSC - IS
+RSC - IR
+NAC - IN
+NAC - IT
+
+DATA - IAD
+DATA - IBD
+DATA - ISD
+DATA - IRD
+DATA - IND
+
+UI -u-( IA
+UI -u-( IX
+UI -u-( IB
+UI -u-( IS
+UI -u-( IR
+UI -u-( IN
+
+BSC -l-( IX
+RSC -l-( IX
+
+BSC -d-( IN
+BSC -d-( IT
+RSC -d-( IN
+RSC -d-( IT
+
+ACC -d-( IAD
+BSC -d-( IBD
+BSC -d-( ISD
+RSC -d-( IBD
+RSC -d-( ISD
+RSC -d-( IRD
+NAC -d-( IND
+
+cloud "Email Service" as EMAIL
+database "Relational Database" as DB
+
+ACC ..> EMAIL
+NAC ..> EMAIL
+DATA --> DB
+
+note top of UI
+<b>Assigned Classes</b>
+None
+end note
+
+note left of ACC
+<b>Assigned Classes</b>
+User, Applicant
+Examiner, Administrator
+Role, RecordStatus
+Session, PasswordResetToken
+end note
+
+note right of BSC
+<b>Assigned Classes</b>
+BookingManager
+ScheduleManager
+end note
+
+note left of RSC
+<b>Assigned Classes</b>
+ResultManager
+end note
+
+note right of NAC
+<b>Assigned Classes</b>
+NotificationService
+Notification, NotificationType
+AuditLog, ActionType
+end note
+
+note bottom of DATA
+<b>Assigned Classes</b>
+Booking, BookingStatus
+TestSlot, Availability
+ExaminerAssignment
+AssignmentStatus
+TestResult, Outcome
+Certificate
+end note
+
+package "Application Interface Definitions" #F1F5F9 {
+
+rectangle "01 - IAccountService\n\nregister(): boolean\nlogin(email: String,\npassword: String): Session\nlogout(session: Session): void\nchangePassword(oldPwd: String,\nnewPwd: String): boolean\nresetPassword(token: String,\nnewPwd: String): boolean" as D01
+
+rectangle "02 - IAccessControlService\n\nisValid(session: Session): boolean\ngetUser(session: Session): User\nupdateRecordStatus(\napplicant: Applicant,\noutcome: Outcome): void" as D02
+
+rectangle "03 - IBookingService\n\nsearchAvailableSlots(\nlocation: String,\ndate: Date): List<TestSlot>\nvalidateBookingCutoff(slot: TestSlot): boolean\ncheckBookingConflict(\napplicantId: int,\nslot: TestSlot): boolean\ncreateBooking(\napplicant: Applicant,\nslot: TestSlot,\ntestType: String): Booking\ncancelBooking(booking: Booking): boolean\nrescheduleBooking(\nbooking: Booking,\nnewSlot: TestSlot): boolean\ngetBookingHistory(\napplicant: Applicant): List<Booking>" as D03
+
+rectangle "04 - ISchedulingService\n\nrecordAvailability(\nexaminer: Examiner,\ndate: Date,\nstart: Time,\nend: Time): Availability\nremoveAvailability(\navailabilityId: int): boolean\ngetAvailableExaminers(\nslot: TestSlot): List<Examiner>\nassignExaminer(\nadmin: Administrator,\nbooking: Booking,\nexaminer: Examiner): ExaminerAssignment\nreassignExaminer(\nadmin: Administrator,\nbooking: Booking,\nnewExaminer: Examiner): ExaminerAssignment\ngetScheduleFor(\nexaminer: Examiner): List<Booking>" as D04
+
+rectangle "05 - IResultService\n\ncanSubmitResult(\nexaminer: Examiner,\nbooking: Booking): boolean\nsubmitResult(\nexaminer: Examiner,\nbooking: Booking,\noutcome: Outcome,\nscore: int,\nremarks: String): TestResult\ngetResult(\napplicant: Applicant,\nbooking: Booking): TestResult\ngetTestHistory(\napplicant: Applicant): List<TestResult>\nissueCertificate(\napplicant: Applicant,\nresult: TestResult): Certificate" as D05
+
+rectangle "06 - INotificationService\n\nnotifyExaminerAssigned(\nassignment: ExaminerAssignment): Notification\nnotifyAssignmentRevoked(\nassignment: ExaminerAssignment): Notification\nnotifyResultAvailable(\nresult: TestResult): Notification\nnotifyBookingConfirmed(\nbooking: Booking): Notification\nnotifyBookingCancelled(\nbooking: Booking): Notification\nnotifyBookingRescheduled(\nbooking: Booking): Notification\ngetNotificationsFor(\nuser: User): List<Notification>" as D06
+
+rectangle "07 - IAuditService\n\nrecordEntry(\nactor: User,\nactionType: ActionType,\nrecordType: String,\nrecordId: int): AuditLog" as D07
+
+D01 -[hidden]right- D02
+D03 -[hidden]right- D04
+D05 -[hidden]right- D06
+
+D01 -[hidden]down- D03
+D02 -[hidden]down- D04
+
+D03 -[hidden]down- D05
+D04 -[hidden]down- D06
+
+D05 -[hidden]down- D07
+}
+
+package "Data Interface Definitions" #F1F5F9 {
+
+rectangle "08 - IAccountData\n\ngetUserByEmail(email: String): User\nsaveUser(user: User): boolean\nsaveSession(session: Session): boolean\nsavePasswordResetToken(\ntoken: PasswordResetToken): boolean\n\nsaveUser persists failed-login\ncounts and account lock status." as D08
+
+rectangle "09 - IBookingData\n\ncreateBookingRecord(\napplicant: Applicant,\nslot: TestSlot,\ntestType: String): Booking\nconfirm(booking: Booking): void\ncancel(booking: Booking): void\nreschedule(\nbooking: Booking,\nslot: TestSlot): void\nmarkCompleted(booking: Booking): void\nreserve(slot: TestSlot): boolean\nrelease(slot: TestSlot): void\nisAvailable(slot: TestSlot): boolean" as D09
+
+rectangle "10 - IScheduleData\n\nsaveAvailability(\navailability: Availability): boolean\ngetAvailability(\nexaminer: Examiner,\ndate: Date): List<Availability>\ncreateAssignment(\nbooking: Booking,\nexaminer: Examiner,\nadmin: Administrator): ExaminerAssignment\ngetActiveAssignment(\nbooking: Booking): ExaminerAssignment\nrevoke(\nassignment: ExaminerAssignment): void" as D10
+
+rectangle "11 - IResultData\n\ncreateResult(\nbooking: Booking,\nexaminer: Examiner,\noutcome: Outcome,\nscore: int,\nremarks: String): TestResult\ngetResult(booking: Booking): TestResult\nisPass(result: TestResult): boolean\nsaveCertificate(\ncertificate: Certificate): boolean" as D11
+
+rectangle "12 - INotificationData\n\nsaveNotification(\nnotification: Notification): boolean\ngetNotificationsFor(\nuser: User): List<Notification>\nsaveAuditEntry(\nentry: AuditLog): boolean" as D12
+
+D08 -[hidden]right- D09
+D10 -[hidden]right- D11
+
+D08 -[hidden]down- D10
+D09 -[hidden]down- D11
+
+D10 -[hidden]down- D12
+}
+
+D07 -[hidden]down- D08
+DATA -[hidden]down- D01
+
+@enduml
