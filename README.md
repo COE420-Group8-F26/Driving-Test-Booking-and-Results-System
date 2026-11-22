@@ -1,116 +1,135 @@
 # Driving Test Booking and Results System
 
-The Driving Test Booking and Results System organizes and centralizes the process of scheduling driving tests and managing their results for applicants, driving examiners, and administrators.
+A web-based system for scheduling driving tests and managing their results for applicants, driving examiners, and administrators.
 
-Developed for **COE 420 – Software Engineering (Section 02)**, Fall 2026, American University of Sharjah.
+**Course:** COE 420 – Software Engineering (Sec 02), Fall 2026
+**University:** American University of Sharjah, College of Engineering
+**Team:** Group 8
+
+---
 
 ## Overview
 
-Applicants can register, view available test slots, manage their bookings, and access their results. Driving examiners can view assigned tests and submit pass or fail results. Administrators manage schedules, bookings, examiner assignments, and test records.
+The system digitizes and centralizes the driving test process:
 
-A test booking moves through different states, from booking to completion or cancellation. Once a test is completed, the examiner records a pass or fail result, and the system updates the applicant's record accordingly. The system also sends notifications when relevant changes occur, such as a booking being rescheduled or a result becoming available.
+- **Applicants** register, view available test slots, book, reschedule or cancel tests, and view their results and test history.
+- **Driving examiners** declare their availability, view assigned tests, and submit pass/fail results.
+- **Administrators** view and filter bookings, view examiner availability, and assign or reassign examiners.
 
-**Core functionality:**
+## Core Features
 
-- Account management (registration, role-based login)
-- Test booking, rescheduling, and cancellation with conflict prevention
-- Examiner assignment
-- Result submission and record updates
-- Notifications
-- Test history
+- **Account management:** registration, role-based login and logout, password reset, applicant profile updates; account lockout for 15 minutes after 5 failed logins
+- **Booking and scheduling:** real-time slot availability, 30-minute booking cutoff, conflict checks, and double-booking prevention
+- **Examiner assignment:** examiner availability, assignment and reassignment with schedule-clash checks
+- **Result management:** pass/fail submission by examiners (one result per booking), automatic update of the applicant's record status, and downloadable certificates for passed tests
+- **Notifications:** booking confirmed/rescheduled/cancelled, examiner assigned/removed, result available; failed notifications are retried 3 times, then the administrator is alerted
+- **Test history:** past bookings, results, and record status for applicants
+- **Audit log:** append-only record of key actions
 
-**Out of scope (for now):** online payment integration, government ID verification integration, multi-language support, third-party driving-school integrations.
+## Out of Scope
 
-## Team — Group 8
-
-| Name           | Major                |
-| -------------- | -------------------- |
-| Areej Syed     | Computer Science     |
-| Farah Tawalbeh | Computer Engineering |
-| Aira Khawar    | Computer Science     |
-| Zainab Kashif  | Computer Science     |
-
-Contact details and individual skill sets are listed under [`Team/`](Team).
-
-## Repository Structure
-
-```
-.
-├── Documents/                          
-├── Project/
-│   ├── Project_Title.md
-│   ├── Project_Description.md
-│   ├── Scope.md
-│   ├── Feasibility_Study.md
-│   ├── Process_Model.md
-│   ├── Risk_Register.md
-│   ├── Stakeholder.md
-│   ├── Requirements/
-│   │   ├── Use_Cases.md
-│   │   ├── Scenarios.md
-│   │   ├── Functional_Requirements.md
-│   │   ├── Non_Functional_Requirements.md
-│   │   └── Use_Case_Diagram/
-│   ├── Data_Flow_Modeling/
-│   │   ├── Context_Diagram/
-│   │   ├── Level_0_DFD/
-│   │   ├── Core_Processes_Matrix.md
-│   │   └── DFD_Consistency_Check.md
-│   └── Project_Scheduling/
-│       ├── WBS.md
-│       ├── Gantt_Chart/
-│       ├── Network_Schedule/
-│       └── Critical_Path.md
-├── Source_Code/                        # Application source code (in progress)
-└── Team/
-    ├── Team_Members.md
-    ├── Skills.md
-    └── Contact_Information.md
-```
+- Online payment gateway integration for test fees
+- Integration with external national ID / government verification systems
+- Multi-language support
+- Integration with third-party driving school or lesson-booking platforms
 
 ## Development Approach
 
-The team is using an **Incremental Model**: the system is broken into functional increments (e.g., registration/login, then booking/scheduling, then examiner assignment, results, and notifications), with each increment integrated and tested before the next begins. See [`Project/Process_Model.md`](Project/Process_Model.md) for details.
+- **Process model:** Incremental. Each increment adds functionality to the previous version (account management, booking and scheduling, examiner management, results and test history), followed by notification integration, system integration and testing, and deployment.
+- **Architecture:** 3-layer closed architecture (presentation, application, data), where each layer only calls the layer directly below it.
 
 ## Tech Stack
 
-Frontend, backend language, and database are still being finalized. Candidates under consideration:
+Not yet finalized. Candidates:
 
 - **Frontend:** HTML, CSS, JavaScript
 - **Backend:** Python or Java
 - **Database:** PostgreSQL or MySQL
 
-This section will be updated once the stack is locked in.
-
-## Requirements & Design Docs
-
-- [Project Scope](Project/Scope.md)
-- [Feasibility Study](Project/Feasibility_Study.md)
-- [Stakeholder Analysis](Project/Stakeholder.md)
-- [Risk Register](Project/Risk_Register.md)
-- [Use Cases](Project/Requirements/Use_Cases.md)
-- [Scenarios](Project/Requirements/Scenarios.md)
-- [Functional Requirements](Project/Requirements/Functional_Requirements.md)
-- [Non-Functional Requirements](Project/Requirements/Non_Functional_Requirements.md)
-
-## Data Flow Modeling
-
-- [Context Diagram](Project/Data_Flow_Modeling/Context_Diagram)
-- [Level-0 DFD](Project/Data_Flow_Modeling/Level_0_DFD)
-- [Core Processes Matrix](Project/Data_Flow_Modeling/Core_Processes_Matrix.md)
-- [DFD Consistency and Balancing Check](Project/Data_Flow_Modeling/DFD_Consistency_Check.md)
-
-## Project Scheduling
-
-- [Work Breakdown Structure (WBS)](Project/Project_Scheduling/WBS.md)
-- [Gantt Chart](Project/Project_Scheduling/Gantt_Chart)
-- [Network Schedule](Project/Project_Scheduling/Network_Schedule)
-- [Critical Path](Project/Project_Scheduling/Critical_Path.md)
-
 ## Project Status
 
-In progress. The requirements, design, and planning stages are complete: scope, feasibility study, risk register, stakeholder analysis, use cases, scenarios, functional and non-functional requirements, data flow models (context diagram, Level-0 DFD, and core processes matrix), and project scheduling (WBS, Gantt chart, network schedule, and critical path). Source code development has not yet started.
+- Requirements, planning, modeling, and architecture design: complete
+- Source code development: in progress
 
-## Lab 6 – UML Sequence Diagram Modeling
-Selected use cases: [Selected_Use_Cases.md](Project/Behavioral_Modeling/Selected_Use_Cases.md)
-Sequence diagrams: [Sequence_Diagrams](Project/Behavioral_Modeling/Sequence_Diagrams)
+## Repository Structure
+
+````
+Driving-Test-Booking-and-Results-System/
+├── Documents/
+│   └── .gitkeep
+├── Project/
+│   ├── Behavioral_Modeling/
+│   │   ├── Activity_Diagrams/
+│   │   │   ├── AD_UC01_Log_In.png
+│   │   │   ├── AD_UC03_Book_Test_Slot.png
+│   │   │   ├── AD_UC05_Assign_Examiner_to_Booking.pdf
+│   │   │   └── AD_UC07_Submit_Test_Result.png
+│   │   ├── Sequence_Diagrams/
+│   │   │   ├── UC-01.png
+│   │   │   ├── UC-03.png
+│   │   │   ├── UC-05.png
+│   │   │   └── UC-07.png
+│   │   ├── Selected_Use_Cases.md
+│   │   └── Selected_Workflows.md
+│   ├── Data_Flow_Modeling/
+│   │   ├── Context_Diagram/
+│   │   │   └── Context Diagram.png
+│   │   ├── Level_0_DFD/
+│   │   │   └── lvl0 diagram.png
+│   │   ├── Core_Processes_Matrix.md
+│   │   └── DFD_Consistency_Check.md
+│   ├── Function_Point_Analysis/
+│   │   ├── FPA_Report.pdf
+│   │   ├── Function_Point_Calculations.xlsx
+│   │   └── Function_Point_Components.xlsx
+│   ├── Object_Modeling/
+│   │   ├── Class_Diagram/
+│   │   ├── Individual_Models/
+│   │   ├── Class_Inventory.md
+│   │   ├── Class_Model_Consistency_Check.md
+│   │   └── Integration_Notes.md
+│   ├── Project_Scheduling/
+│   │   ├── Gantt_Chart/
+│   │   │   └── Gantt_Chart.png
+│   │   ├── Network_Schedule/
+│   │   │   └── Network_Schedule.png
+│   │   ├── Critical_Path.md
+│   │   └── WBS.md
+│   ├── Requirements/
+│   │   ├── Use_Case_Diagram/
+│   │   │   ├── .gitkeep
+│   │   │   └── Driving Test Booking System.png
+│   │   ├── Functional_Requirements.md
+│   │   ├── Non_Functional_Requirements.md
+│   │   ├── Scenarios.md
+│   │   └── Use_Cases.md
+│   ├── Software_Architecture/
+│   │   ├── Component_Diagram/
+│   │   ├── Architectural_Design_Goals.md
+│   │   ├── Architectural_Style_Selection.md
+│   │   ├── Class_Distribution.md
+│   │   └── Component_Descriptions.md
+│   ├── .gitkeep
+│   ├── Feasibility_Study.md
+│   ├── Process_Model.md
+│   ├── Project_Description.md
+│   ├── Project_Title.md
+│   ├── Risk_Register.md
+│   ├── Scope.md
+│   └── Stakeholder.md
+├── Source_Code/
+├── Team/
+└── README.md
+````
+
+## Team (Group 8)
+
+| Name | Major |
+|------|-------|
+| Areej Syed | Computer Science |
+| Farah Tawalbeh | Computer Engineering |
+| Aira Khawwar | Computer Science |
+| Zainab Kashif | Computer Science |
+
+
+
