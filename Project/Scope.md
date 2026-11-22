@@ -1,24 +1,25 @@
 # Project Scope
 
 ## 1. Project Objective
-The Driving Test Booking and Results System is designed to organize and centralize the process of scheduling driving tests and managing their results for applicants, driving examiners, and administrators. Applicants can register, view available test slots, manage their bookings, and access their results. Driving examiners can view assigned tests and submit pass or fail results. Administrators manage schedules, bookings, examiner assignments, and test records.
+The Driving Test Booking and Results System is designed to organize and centralize the process of scheduling driving tests and managing their results for applicants, driving examiners, and administrators. Applicants can register, view available test slots, manage their bookings, and access their results. Driving examiners can view assigned tests and submit pass or fail results. Administrators manage bookings, examiner assignments, and booking records.
 
 A test booking moves through different states, from booking to completion or cancellation. Once a test is completed, the examiner records whether the applicant passed or failed, and the system updates the applicant's record accordingly. The system also sends notifications when relevant changes occur, such as a booking being rescheduled or a test result becoming available.
 
 ## 2. Target Users
 - **Applicants** : individuals who register, book, reschedule, or cancel driving tests, and view their results and test history.
 - **Driving Examiners** : staff who are assigned to conduct tests and submit pass/fail results.
-- **Administrators** : staff who manage bookings, schedules, examiner assignments, and records.
+- **Administrators** : staff who manage bookings, examiner assignments, and booking records.
 
 ## 3. In-Scope Features
 The system's main functionalities are:
-- **Account Management** : registration and secure, role based login for applicants, examiners, and administrators
+- **Account Management** : registration, secure role-based login and logout for applicants, examiners, and administrators, password reset, and applicant profile updates (address, phone)
 - **Test Booking and Scheduling** : booking, rescheduling, and cancellation of test slots, with real-time availability and automated conflict handling to prevent double-booking
-- **Examiner Assignment** : assigning examiners to scheduled tests
-- **Result Management** : digital submission of pass/fail results by examiners, with automatic updates to the applicant's record once a test is completed
-- **Notifications** : automated alerts when relevant changes occur, such as a booking being rescheduled or a result becoming available
+- **Examiner Assignment** : examiners declare their availability; administrators assign and reassign examiners to confirmed bookings, with schedule-clash checks
+- **Result Management** : digital submission of pass/fail results by examiners, with automatic updates to the applicant's record once a test is completed, and downloadable result certificates for passed tests
+- **Notifications** : automated alerts when relevant changes occur, such as a booking being confirmed, rescheduled, or cancelled, an examiner being assigned or removed, or a result becoming available; administrators are alerted if a notification still fails after 3 retries
 - **Test History** : applicant access to past bookings, results, and record status
-- **Admin Dashboard** : tools for administrators to manage schedules, bookings, examiner assignments, and test records
+- **Admin Dashboard** : tools for administrators to view and filter bookings, view examiner availability, and assign or reassign examiners
+- **Audit Log** : append-only record of key actions (bookings, profile updates, result submissions)
 
 ## 4. Out-of-Scope Features
 - Online payment gateway integration for test fees 

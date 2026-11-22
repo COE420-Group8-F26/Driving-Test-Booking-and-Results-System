@@ -14,7 +14,7 @@ A genuine need is addressed by the system through centralizing driving test book
 
 ## 4. Schedule Feasibility
 
-If the team focuses on the core features of the proposed system — including account management, test scheduling, bookings and results, examiner assignments, notifications, and test histories — the project is feasible to complete within the 4-month course duration. An incremental development approach can be used when developing and testing system stages, allowing the team to focus on essential features and enable early identification of issues. The main risk is scope creep, so additional features can be left for future development.
+If the team focuses on the core features of the proposed system — including account management, test scheduling, bookings and results, examiner assignments, notifications, and test histories — the project is feasible to complete within the 5-month course duration. An incremental development approach can be used when developing and testing system stages, allowing the team to focus on essential features and enable early identification of issues. The main risk is scope creep, so additional features can be left for future development.
 
 ## 5. Overall Feasibility
 
